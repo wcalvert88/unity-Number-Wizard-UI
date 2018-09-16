@@ -4,8 +4,8 @@ using UnityEngine;
 using TMPro;
 
 public class NumberWizard : MonoBehaviour {
-    [SerializeField] int max = 1000;
-    [SerializeField] int min = 1;
+    [SerializeField] int max;
+    [SerializeField] int min;
     [SerializeField] TextMeshProUGUI guessText;
     int guess;
 
@@ -17,12 +17,19 @@ public class NumberWizard : MonoBehaviour {
     void StartGame ()
     {
         NextGuess(); 
-        max = max + 1;
     }
 
     void NextGuess()
     {
-        guess = (max + min) / 2;
+        if (min > max)
+        {
+            min = max;
+        }
+        if (max < min)
+        {
+            max = min;
+        }
+        guess = Random.Range(min, max);
         guessText.text = guess.ToString();
     }
 
@@ -30,19 +37,24 @@ public class NumberWizard : MonoBehaviour {
     {
         max = 1000;
         min = 1;
-        guess = 500;
         StartGame();
     }
 
     public void OnPressHigher()
     {
-        min = guess;
-        NextGuess();
+        if (guess < max)
+        {
+            min = guess + 1;
+            NextGuess();
+        }
     }
 
     public void OnPressLower()
     {
-        max = guess;
-        NextGuess();
+        if (guess > min)
+        {
+            max = guess - 1;
+            NextGuess();
+        }
     }
 }
